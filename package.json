@@ -1,0 +1,32 @@
+{
+  "name": "oh-my-research",
+  "version": "0.1.0",
+  "description": "OpenCode plugin: OpenSpec OPSX-aligned skills + adapted Superpowers engineering skills",
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "skills"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "openspec",
+    "opsx"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USER/oh-my-research.git"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

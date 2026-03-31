@@ -1,0 +1,6 @@
+[submodule "3rdparty/openspec"]
+	path = 3rdparty/openspec
+	url = https://github.com/Fission-AI/OpenSpec.git
+[submodule "3rdparty/superpowers"]
+	path = 3rdparty/superpowers
+	url = https://github.com/obra/superpowers.git
