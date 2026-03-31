@@ -33,7 +33,7 @@
   },
   "scripts": {
     "test": "jest",
-    "postinstall": "cd 3rdparty/openspec && npm install && npm run build"
+    "postinstall": "cd 3rdparty/openspec && npm install --include=dev && npm run build"
   },
   "bin": {
     "openspec": "./bin/openspec.js"
