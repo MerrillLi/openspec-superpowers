@@ -26,6 +26,6 @@ try {
   runTsc();
   console.log('\n✅ Build completed successfully!');
 } catch (error) {
-  console.error('\n❌ Build failed!');
+  console.error('\n❌ Build failed!', error);
   process.exit(1);
 }
