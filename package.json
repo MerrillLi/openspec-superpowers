@@ -13,7 +13,9 @@
   },
   "files": [
     "index.js",
-    "skills"
+    "skills",
+    "bin",
+    "3rdparty"
   ],
   "keywords": [
     "opencode",
@@ -30,7 +32,11 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "cd 3rdparty/openspec && npm install && npm run build"
+  },
+  "bin": {
+    "openspec": "./bin/openspec.js"
   },
   "devDependencies": {
     "jest": "^29.0.0"
