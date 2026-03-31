@@ -5,8 +5,16 @@
 
 ## 安装（只用 Git 仓库）
 
+你可以直接通过 npm 从 GitHub 仓库全局安装魔改版本的 openspec（会自动编译并链接 `openspec` 命令）：
+
 ```bash
-npm install -g git+https://github.com/MerrillLi/openspec-superpowers.git
+npm install -g https://github.com/MerrillLi/openspec-superpowers.git
+```
+
+如果你的网络需要，也可以使用：
+
+```bash
+npm install -g git+ssh://git@github.com/MerrillLi/openspec-superpowers.git
 ```
 
 ## 配置 OpenCode
