@@ -67,7 +67,7 @@ npm publish --access public
 }
 ```
 
-重启后插件会注册 **`skills/`** 并注入 **using-openspec-superpowers** 引导。
+重启后插件会注册 **`skills/`**，并把 **using-openspec-superpowers** 作为 bootstrap 一次性前置到会话中的第一条用户消息。
 
 **验证：** 使用 skill 工具列出技能，应能看到 `openspec-explore`、`openspec-propose`、`openspec-verify-change` 等。
 

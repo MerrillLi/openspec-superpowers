@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const BOOTSTRAP_MARKER = '<EXTREMELY_IMPORTANT>';
 
 const extractAndStripFrontmatter = (content) => {
   const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
@@ -48,10 +49,13 @@ const OpenSpecSuperpowersPlugin = async () => {
 - \`Skill\` → native \`skill\` tool
 - File and shell tools → your native equivalents
 
-**Skills path (this plugin):** \`${pluginSkillsDir}\`
-Use \`openspec\` CLI in the target repo where \`openspec init\` was run. OPSX commands are \`/opsx:*\` in chat.`;
+Use OpenCode's native \`skill\` tool to list and load other relevant skills.`;
 
-    return `<EXTREMELY_IMPORTANT>
+    return `${BOOTSTRAP_MARKER}
+You have lightweight engineering superpowers.
+
+**IMPORTANT: The using-openspec-superpowers skill content is included below. It is ALREADY LOADED - you are currently following it. Do NOT use the skill tool to load "using-openspec-superpowers" again - that would be redundant.**
+
 ${content}
 
 ${toolMapping}
@@ -67,11 +71,18 @@ ${toolMapping}
       }
     },
 
-    'experimental.chat.system.transform': async (_input, output) => {
+    'experimental.chat.messages.transform': async (_input, output) => {
       const bootstrap = getBootstrapContent();
-      if (bootstrap) {
-        (output.system ||= []).push(bootstrap);
+      if (!bootstrap || !output.messages?.length) return;
+
+      const firstUser = output.messages.find((message) => message.info?.role === 'user');
+      if (!firstUser || !firstUser.parts?.length) return;
+      if (firstUser.parts.some((part) => part.type === 'text' && part.text.includes(BOOTSTRAP_MARKER))) {
+        return;
       }
+
+      const ref = firstUser.parts[0];
+      firstUser.parts.unshift({ ...ref, type: 'text', text: bootstrap });
     },
   };
 };

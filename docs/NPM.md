@@ -31,7 +31,7 @@ https://www.npmjs.com/package/openspec-superpowers
 ## 如何确认「能看到」插件
 
 1. **技能列表**：在对话里让助手用内置 **skill** 工具列出技能，应出现 `openspec-explore`、`using-openspec-superpowers` 等（名称以实际解析为准）。
-2. **系统提示**：插件通过 `experimental.chat.system.transform` 注入了 **using-openspec-superpowers** 的引导；新开会话后模型应能概括本插件与 OpenSpec 的协作方式。
+2. **首条消息引导**：插件通过 `experimental.chat.messages.transform` 将 **using-openspec-superpowers** 作为 bootstrap 一次性前置到会话中的第一条用户消息；新开会话后模型应默认记得 `skill`、subagent、parallel、TDD、debugging、verification 等能力。
 3. **日志**（可选）：终端运行 `opencode` 时加 `--print-logs` 或查看 OpenCode 日志里是否加载 `openspec-superpowers`。
 
 ## 版本升级

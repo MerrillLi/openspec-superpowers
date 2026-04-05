@@ -4,7 +4,7 @@
 
 | 技能目录 | 说明 |
 |----------|------|
-| `using-openspec-superpowers` | 精简版「入口说明」，替代上游 `using-superpowers` 的完整行为 |
+| `using-openspec-superpowers` | 轻量 bootstrap 技能；对应上游 `using-superpowers`，用于唤醒通用工程能力而不接管 OpenSpec 流程 |
 | `openspec-explore` | OPSX explore + §3 强清单；**非**独立 `brainstorming` 入口 |
 | `openspec-propose` | OPSX propose + §3.2 writing-plans 粒度 |
 | `openspec-verify-change` | OPSX verify + §3.1 内嵌 Code quality |
