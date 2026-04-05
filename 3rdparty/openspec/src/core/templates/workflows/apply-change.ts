@@ -74,21 +74,6 @@ export function getApplyChangeSkillTemplate(): SkillTemplate {
    - Mark task complete in the tasks file: \`- [ ]\` → \`- [x]\`
    - Continue to next task
 
-   **TDD and implementation discipline (Superpowers-inspired):**
-   - When a task implies behavior change, define or find the expected scenario first.
-   - Update/add tests for the scenario before or alongside the implementation where possible.
-   - Keep changes minimal and prove each task with evidence in the task notes.
-
-   **Automatic parallel mode (Superpowers integration):**
-   - For independent tasks, auto-dispatch in parallel with Task tool (subagent_type: "general-purpose", prompt: "Use Skill tool to invoke subagent-driven-development for change '<name>'. Follow tasks and context to implement the change with spec-compliance checks and code quality checks.")
-   - If dependencies exist or parallel execution is not possible, fallback to sequential execution in this session.
-
-   **Debug escalation (Systematic debugging):**
-   - If tests or checks fail, pause and run a systematic debug loop:
-     - isolate the failing artifact
-     - reproduce the regression in minimal context
-     - dispatch a focused subagent review for root-cause analysis if needed
-
    **Pause if:**
    - Task is unclear → ask for clarification
    - Implementation reveals a design issue → suggest updating artifacts
@@ -163,7 +148,6 @@ What would you like to do?
 - Update task checkbox immediately after completing each task
 - Pause on errors, blockers, or unclear requirements - don't guess
 - Use contextFiles from CLI output, don't assume specific file names
-- By default, prefer automatic parallel execution for independent tasks, fallback to sequential when dependencies prevent safe parallelism.
 
 **Fluid Workflow Integration**
 
@@ -247,10 +231,6 @@ export function getOpsxApplyCommandTemplate(): CommandTemplate {
    - Mark task complete in the tasks file: \`- [ ]\` → \`- [x]\`
    - Continue to next task
 
-   **Automatic parallel mode (Superpowers integration):**
-   - For independent tasks, auto-dispatch in parallel with Task tool (subagent_type: "general-purpose", prompt: "Use Skill tool to invoke subagent-driven-development for change '<name>'. Follow tasks and context to implement the change with spec-compliance checks and code quality checks.")
-   - If dependencies exist or parallel execution is not possible, fallback to sequential execution in this session.
-
    **Pause if:**
    - Task is unclear → ask for clarification
    - Implementation reveals a design issue → suggest updating artifacts
@@ -325,7 +305,6 @@ What would you like to do?
 - Update task checkbox immediately after completing each task
 - Pause on errors, blockers, or unclear requirements - don't guess
 - Use contextFiles from CLI output, don't assume specific file names
-- By default, prefer automatic parallel execution for independent tasks, fallback to sequential when dependencies prevent safe parallelism.
 
 **Fluid Workflow Integration**
 

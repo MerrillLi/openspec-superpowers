@@ -1,20 +1,21 @@
 # Code Quality Reviewer Prompt Template
 
-Use when dispatching a **development-time** code quality reviewer subagent (e.g. during **apply**). **Pre-archive** quality is still decided by **`openspec-verify-change`** / **`/opsx:verify`** (PLAN §3.1).
+Use when dispatching a **development-time** code quality reviewer subagent (e.g. during **apply**). If you want a whole-change verification report later, use **`openspec-verify-change`** / **`/opsx:verify`**.
 
 **Purpose:** Verify implementation is well-built (clean, tested, maintainable).
 
 **Only dispatch after spec compliance review passes.**
 
-**Dispatch (adapt to your platform):** subagent / Task with role “code quality reviewer”, passing:
+**Dispatch (adapt to your platform):** subagent / Task with role "code quality reviewer", passing:
 
 ```
 WHAT_WAS_IMPLEMENTED: [from implementer's report]
 PLAN_OR_REQUIREMENTS: Task N from openspec change tasks artifact
-BASE_SHA: [commit before task]
-HEAD_SHA: [current commit]
+FILES_CHANGED: [files changed during the task]
 DESCRIPTION: [task summary]
 ```
+
+The reviewer should assess the task's actual changed files and reported test evidence. Do not rely on commit SHAs or a commit-based diff being available.
 
 **In addition to standard code quality concerns, the reviewer should check:**
 - Does each file have one clear responsibility with a well-defined interface?

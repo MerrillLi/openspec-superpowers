@@ -1,71 +1,167 @@
 ---
 name: openspec-propose
-description: Create an OpenSpec change and all apply-ready artifacts in one pass; tasks must match writing-plans-style verifiable steps and checkbox tracking. Use after explore.
+description: Propose a new change with all apply-ready artifacts generated in one step. Use when the user wants a complete proposal, design, and task set ready for implementation.
 ---
 
-# OpenSpec propose (`/opsx:propose`)
+# OpenSpec propose (`openspec-propose`, `/opsx:propose`)
 
-## Normative alignment (product PLAN §3.2)
+Propose a new change - create the change and generate all artifacts in one step.
 
-- **No second plan stage:** Do **not** treat upstream **writing-plans** as a separate mandatory OPSX phase. The **same** `propose` run must produce plans detailed enough to match **writing-plans** expectations.
-- **Detail bar:** `tasks.md` (and any task-bearing artifact your schema uses) **shall** include:
-  - **Verifiable small steps** (each step completable and checkable in isolation where possible).
-  - **Checkbox tracking** (`- [ ]` / `- [x]`) for execution.
-  - Enough context that someone with **no prior codebase context** could follow (files to touch, commands to run, expected outcomes) — within what the schema allows.
-- **Paths:** Only OpenSpec change artifacts; field names follow **project schema** from `openspec instructions`.
+I'll create a change with artifacts such as:
+
+- `proposal.md` (what and why)
+- `design.md` (how)
+- `tasks.md` (implementation steps)
+
+When ready to implement, run `/opsx:apply`.
 
 ---
+
+**Input:** The user's request should include a change name (kebab-case) or a description of what they want to build.
 
 ## Steps
 
-**Input:** Change name (kebab-case) **or** description of what to build.
+1. **If no clear input is provided, ask what they want to build**
 
-1. **If input is missing or vague**, ask what to build (open-ended). Derive a kebab-case name.
+Ask an open-ended question such as:
 
-2. **Create the change**
+> "What change do you want to work on? Describe what you want to build or fix."
+
+From their description, derive a kebab-case name.
+
+Do not proceed without understanding what the user wants to build.
+
+2. **Create the change directory**
 
 ```bash
 openspec new change "<name>"
 ```
 
-3. **Artifact order**
+This creates a scaffolded change at `openspec/changes/<name>/` with `.openspec.yaml`.
+
+3. **Get the artifact build order**
 
 ```bash
 openspec status --change "<name>" --json
 ```
 
-Use `applyRequires` and dependency order from `artifacts`.
+Parse the JSON to get:
 
-4. **For each ready artifact**
+- `applyRequires`: artifact IDs needed before implementation
+- `artifacts`: all artifacts with status and dependencies
+
+4. **Create artifacts in sequence until apply-ready**
+
+Loop through artifacts in dependency order.
+
+For each artifact that is ready:
 
 ```bash
 openspec instructions <artifact-id> --change "<name>" --json
 ```
 
-Use `template`, `instruction`, `outputPath`; apply `context`/`rules` as constraints **without** copying them into files.
+Use the returned:
 
-5. **tasks artifact — required shape (PLAN §3.2)**
+- `template`
+- `instruction`
+- `outputPath`
+- `dependencies`
+- `context`
+- `rules`
 
-When generating **tasks** (or equivalent):
+Read completed dependency artifacts for context.
 
-- Mirror **writing-plans** structure: header with goal, architecture summary, tracking note for implementers.
-- Each task: **Files** (create/modify/test), then **steps** with `- [ ]`, each step **small**, **testable**, and **numbered** where helpful.
-- Include explicit verification commands and expected results per step when applicable (TDD: failing test → pass → commit).
+Create the artifact using the `template` structure and follow the `instruction`, while treating `context` and `rules` as constraints for you, not content to copy into the file.
 
-6. Re-run `openspec status --change "<name>" --json` until all `applyRequires` artifacts are `done`.
+5. **Artifact quality bar in this plugin**
 
-7. **Final status**
+The schema still defines artifact structure, but in this plugin the generated artifacts must also meet these expectations.
+
+### `proposal.md`
+
+Keep it high-level and decision-oriented.
+
+- explain **why** this change exists
+- define the intended **scope**
+- state clear **success criteria**
+- state explicit **non-goals**
+
+Do not turn `proposal.md` into a low-level implementation plan.
+
+### `design.md`
+
+Use it for architecture and key technical decisions.
+
+- describe module or subsystem boundaries
+- describe key interfaces and data flow
+- explain important design decisions and trade-offs
+- clarify responsibilities between major parts of the system
+
+Do not expand `design.md` into a step-by-step execution checklist.
+
+### `tasks.md`
+
+`tasks.md` must absorb the useful rigor of **writing-plans** without becoming a giant code dump.
+
+For each task:
+
+- use checkbox tracking (`- [ ]` / `- [x]`)
+- keep steps small, concrete, and verifiable
+- include exact file paths to create or modify where they are known
+- include validation steps and commands where they matter
+- make the work executable by someone with little prior context
+
+For the overall task set:
+
+- break work into sensible, independently checkable chunks
+- make sure tasks cover the scope promised by proposal and design
+- prefer actionable instructions over vague placeholders
+- do not require large embedded code snippets unless the schema explicitly calls for them
+
+This is a **middle-weight** planning bar:
+
+- more executable than a generic task list
+- less prescriptive than full writing-plans code-per-step output
+
+6. **Continue until all apply-required artifacts are done**
+
+After creating each artifact, re-run:
+
+```bash
+openspec status --change "<name>" --json
+```
+
+Stop when every artifact ID in `applyRequires` is marked `done`.
+
+7. **Show final status**
 
 ```bash
 openspec status --change "<name>"
 ```
 
-Summarize artifacts, remind: next is **`/opsx:apply`** and engineering skills (TDD, SDD) as needed.
+Summarize:
+
+- change name and location
+- artifacts created
+- what is ready for implementation
+- that `/opsx:apply` is the next step
+
+---
+
+## Artifact Creation Guidelines
+
+- Follow the `instruction` field from `openspec instructions` for each artifact type.
+- The schema defines what each artifact should contain; follow it.
+- Read dependency artifacts before creating new ones.
+- Use `template` as the structure for the output file.
+- Do not copy raw `context`, `rules`, or similar instruction blocks into artifacts.
+- If details are still imperfect, prefer producing a reviewable draft that the user can inspect rather than blocking unnecessarily.
 
 ---
 
 ## Guardrails
 
-- Do not point users to a separate “run writing-plans skill” as the default way to refine the plan.
-- If a change name already exists, ask whether to continue or rename.
-- Verify each file exists after writing before proceeding.
+- Create all artifacts needed for implementation as defined by the schema's `applyRequires`.
+- Do not tell the user to run a separate `writing-plans` skill as the default next step.
+- If a change with that name already exists, ask whether to continue it or create a new one.
+- Verify each artifact file exists after writing before proceeding.

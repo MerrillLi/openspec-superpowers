@@ -271,19 +271,6 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 > **Note:** OpenSpec also supports user-level schemas at `~/.local/share/openspec/schemas/` for sharing across projects, but project-level schemas in `openspec/schemas/` are recommended since they're version-controlled with your code.
 
-## Custom Skill Packs
-
-This fork also supports project-level and bundled skill packs.
-
-By default, `openspec init` and `openspec update` copy skill packs that contain `SKILL.md` from:
-
-- `<project>/skills/*` (developer-authored, per-project)
-- `<openspec-package>/skills/*` (fork bundled default set)
-
-This means contributors can keep shared workflows and quality disciplines in the fork while still overriding them locally in each project.
-
-For setup details, see [Custom Skill Packs](custom-skill-packs.md).
-
 ---
 
 ## Examples

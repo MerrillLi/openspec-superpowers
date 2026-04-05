@@ -44,10 +44,6 @@ import {
   getToolsNeedingProfileSync,
 } from './profile-sync-drift.js';
 import {
-  getProjectCustomSkillPacks,
-  syncProjectCustomSkillPacks,
-} from './shared/custom-skill-packs.js';
-import {
   scanInstalledWorkflows as scanInstalledWorkflowsShared,
   migrateIfNeeded as migrateIfNeededShared,
 } from './migration.js';
@@ -173,7 +169,6 @@ export class UpdateCommand {
     // 9. Determine what to generate based on delivery
     const skillTemplates = shouldGenerateSkills ? getSkillTemplates(desiredWorkflows) : [];
     const commandContents = shouldGenerateCommands ? getCommandContents(desiredWorkflows) : [];
-    const customSkillPacks = await getProjectCustomSkillPacks(resolvedProjectPath);
 
     // 10. Update tools (all if force, otherwise only those needing update)
     const toolsToUpdate = this.force ? configuredTools : [...toolsToUpdateSet];
@@ -203,10 +198,6 @@ export class UpdateCommand {
             const transformer = tool.value === 'opencode' ? transformToHyphenCommands : undefined;
             const skillContent = generateSkillContent(template, OPENSPEC_VERSION, transformer);
             await FileSystemUtils.writeFile(skillFile, skillContent);
-          }
-
-          if (customSkillPacks.length > 0) {
-            await syncProjectCustomSkillPacks(skillsDir, customSkillPacks);
           }
 
           removedDeselectedSkillCount += await this.removeUnselectedSkillDirs(skillsDir, desiredWorkflows);
@@ -658,7 +649,6 @@ export class UpdateCommand {
     const shouldGenerateCommands = delivery !== 'skills';
     const skillTemplates = shouldGenerateSkills ? getSkillTemplates(desiredWorkflows) : [];
     const commandContents = shouldGenerateCommands ? getCommandContents(desiredWorkflows) : [];
-    const customSkillPacks = await getProjectCustomSkillPacks(projectPath);
 
     for (const toolId of selectedTools) {
       const tool = AI_TOOLS.find((t) => t.value === toolId);
@@ -679,10 +669,6 @@ export class UpdateCommand {
             const transformer = tool.value === 'opencode' ? transformToHyphenCommands : undefined;
             const skillContent = generateSkillContent(template, OPENSPEC_VERSION, transformer);
             await FileSystemUtils.writeFile(skillFile, skillContent);
-          }
-
-          if (customSkillPacks.length > 0) {
-            await syncProjectCustomSkillPacks(skillsDir, customSkillPacks);
           }
         }
 

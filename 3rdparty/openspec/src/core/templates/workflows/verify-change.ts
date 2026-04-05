@@ -44,11 +44,10 @@ export function getVerifyChangeSkillTemplate(): SkillTemplate {
 
 4. **Initialize verification report structure**
 
-   Create a report structure with four dimensions:
+   Create a report structure with three dimensions:
    - **Completeness**: Track tasks and spec coverage
    - **Correctness**: Track requirement implementation and scenario coverage
    - **Coherence**: Track design adherence and pattern consistency
-   - **Code quality**: Track clarity, maintainability, and risk coverage based on Superpowers-style review prompts
 
    Each dimension can have CRITICAL, WARNING, or SUGGESTION issues.
 
@@ -109,25 +108,7 @@ export function getVerifyChangeSkillTemplate(): SkillTemplate {
      - Add SUGGESTION: "Code pattern deviation: <details>"
      - Recommendation: "Consider following project pattern: <example>"
 
-8. **Verify Code Quality (Superpowers-style checks)**
-
-   - Review changed files for readability, defensive handling, error visibility, and long-term maintenance risk.
-   - Spot-check for:
-     - brittle coupling
-     - hidden side effects
-     - missing validation or guardrails
-     - weak observability
-   - For each issue with high risk, add CRITICAL or WARNING with file references and precise remediation.
-
-   - If needed, dispatch targeted review via subagent workflow rather than creating a parallel standalone quality command.
-
-9. **Generate Verification Report**
-
-   - Extend the summary scorecard to include Code quality status.
-   - Keep CRITICAL/WARNING/SUGGESTION separation strict:
-     - CRITICAL: must fix before archive
-     - WARNING: should fix before merge
-     - SUGGESTION: optional cleanup
+8. **Generate Verification Report**
 
    **Summary Scorecard**:
    \`\`\`
@@ -139,7 +120,6 @@ export function getVerifyChangeSkillTemplate(): SkillTemplate {
    | Completeness | X/Y tasks, N reqs|
    | Correctness  | M/N reqs covered |
    | Coherence    | Followed/Issues  |
-   | Code quality | Pass/Needs fix   |
    \`\`\`
 
    **Issues by Priority**:
@@ -147,7 +127,6 @@ export function getVerifyChangeSkillTemplate(): SkillTemplate {
    1. **CRITICAL** (Must fix before archive):
       - Incomplete tasks
       - Missing requirement implementations
-      - Code quality regressions that reduce correctness or observability
       - Each with specific, actionable recommendation
 
    2. **WARNING** (Should fix):
@@ -234,11 +213,10 @@ export function getOpsxVerifyCommandTemplate(): CommandTemplate {
 
 4. **Initialize verification report structure**
 
-   Create a report structure with four dimensions:
+   Create a report structure with three dimensions:
    - **Completeness**: Track tasks and spec coverage
    - **Correctness**: Track requirement implementation and scenario coverage
    - **Coherence**: Track design adherence and pattern consistency
-   - **Code quality**: Track readability, maintainability, and maintenance risk
 
    Each dimension can have CRITICAL, WARNING, or SUGGESTION issues.
 
@@ -299,19 +277,7 @@ export function getOpsxVerifyCommandTemplate(): CommandTemplate {
      - Add SUGGESTION: "Code pattern deviation: <details>"
      - Recommendation: "Consider following project pattern: <example>"
 
-8. **Verify Code Quality (Superpowers-style checks)**
-
-   - Review changed files for readability, defensive handling, error visibility, and long-term maintenance risk.
-   - Spot-check for:
-     - brittle coupling
-     - hidden side effects
-     - missing validation or guardrails
-     - weak observability
-   - For each issue with high risk, add CRITICAL or WARNING with file references and precise remediation.
-
-   - If needed, dispatch targeted review via subagent workflow rather than creating a parallel standalone quality command.
-
-9. **Generate Verification Report**
+8. **Generate Verification Report**
 
    **Summary Scorecard**:
    \`\`\`
@@ -323,7 +289,6 @@ export function getOpsxVerifyCommandTemplate(): CommandTemplate {
    | Completeness | X/Y tasks, N reqs|
    | Correctness  | M/N reqs covered |
    | Coherence    | Followed/Issues  |
-   | Code quality | Pass/Needs fix   |
    \`\`\`
 
    **Issues by Priority**:

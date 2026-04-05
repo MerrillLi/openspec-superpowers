@@ -73,11 +73,11 @@
 
 **已决议条款。**
 
-1. **禁止**将「单独再执行一次 Code quality 技能」作为与 **OpenSpec verify** **并列**的第二条归档前门禁；用户 **仅** 使用 **`openspec-verify-change`** 与 **`/opsx:verify`**。
+1. **禁止**将「单独再执行一次 Code quality 技能」作为与 **OpenSpec verify** **并列**的第二条结构化验证入口；用户若需要完整验证报告，**仅** 使用 **`openspec-verify-change`** 与 **`/opsx:verify`**。
 2. 在 **OpenSpec `verify` 工作流** 及其 OPSX 模板与生成技能中 **显式写入** Code quality 应覆盖的内容：评审焦点、通过或关注标准、必要时 **子代理 dispatch** 的写法。语义来自 **code-quality-reviewer-prompt**，但 **嵌入 verify 的 Steps**，成为 verify 的 **内建维度**，可与现有三维并列扩展为「实现质量 / Code quality」章节，或融入 Coherence 的延伸检查；**同一套验证报告、同一出口**。上游模板见 [verify-change.ts](3rdparty/openspec/src/core/templates/workflows/verify-change.ts)。
 3. **产物与路径。** 验证结果落在 **OpenSpec 约定的变更目录与报告结构**，文件名与章节由 schema 或模板约定。**禁止**另建仅属于 Superpowers 的并行 `CODE_QUALITY.md` 主路径；Code quality 结论写入 **verify 报告中的结构化字段或章节**。
 
-**实施提示。** 与 `explore` 模板一致：在 **`openspec-verify-change`** 指令模板或插件覆盖的同名技能中纳入 `code-quality-reviewer-prompt` 的检查项与约束；**禁止**以独立 code quality 命令或技能与 **`verify` 构成并列的归档前验收入口**。
+**实施提示。** 与 `explore` 模板一致：在 **`openspec-verify-change`** 指令模板或插件覆盖的同名技能中纳入 `code-quality-reviewer-prompt` 的检查项与约束；**禁止**以独立 code quality 命令或技能与 **`verify` 构成并列的结构化验证入口**。
 
 ---
 
@@ -121,8 +121,8 @@
 **apply 阶段与 §3.1 `verify` 的关系**
 
 - **apply 阶段**：SDD 子链 **可以** 按上游习惯派发 **Code quality reviewer** 子代理，用于开发期迭代与快速反馈。
-- **归档前**：代码质量的 **最终门禁** **唯一** 以 **`verify`** 的结论为准，**verify** 含 §3.1 内嵌 Code quality；**禁止**依赖与 `verify` 无关的另一套并行终审流程。
-- **apply** 可重复执行代码质量相关子代理以收敛实现；**archive** 所依赖的 **最终** 代码质量结论 **仅** 来自 §3.1 与 §9 规定的 **`verify`**。二者为 **阶段职责划分**，**不是**两套并列的规范性终审。
+- **整体变更核查**：若用户需要单次、成体系的评估，使用 **`verify`** 汇总 Completeness、Correctness、Coherence 与内嵌 Code quality；**禁止**再并列出另一套独立的「完整验证」主入口。
+- **apply** 可重复执行代码质量相关子代理以收敛实现；**verify** 作为独立、可选的结构化核查流程存在。二者为 **阶段职责划分**，**不是**两套并列的规范性终审。
 
 ---
 
@@ -150,7 +150,7 @@
 
 ## 6. 主流程
 
-**顺序说明。** 先完成 OpenSpec 侧规范活动，再执行 Superpowers 侧工程活动；归档前须完成 **`verify`**，且 **`verify`** 含 §3.1 内嵌 Code quality。本节 **仅用文字** 叙述阶段顺序，**不附流程图**。
+**顺序说明。** 先完成 OpenSpec 侧规范活动，再执行 Superpowers 侧工程活动；必要时可运行 **`verify`** 做结构化核查，且 **`verify`** 含 §3.1 内嵌 Code quality。本节 **仅用文字** 叙述阶段顺序，**不附流程图**。
 
 **阶段 1 — 发散与澄清，OpenSpec `explore`**  
 使用 `explore` 工作流。行为须带 **brainstorming 式强清单**：一次一问、分段确认、对齐后再落笔；产出 **仅** 写入 **OpenSpec 变更目录下的 artifact**，详见 §3。**禁止**将 Superpowers **`brainstorming`** 作为与 **`explore` 并列的首选入口**。
@@ -162,13 +162,13 @@
 执行 **apply**，按 **`propose` 已落盘的计划** 实现代码。此阶段可并行使用 **子代理链**，含 Implementer、Spec reviewer 等，§4、**TDD**、必要时 **systematic-debugging**。主 Agent **仅协调、派工与合并结果**；子代理按模板执行。调试可在实现中反复发生，不单独列为阶段。**禁止**在实现未满足变更要求时进入 **`archive`**，见阶段 4、5。
 
 **阶段 4 — 验证，OpenSpec `verify`，内嵌 Code quality**  
-实现完成后，运行 **`openspec-verify-change`** 与 **`/opsx:verify`**。该步骤 **必须** 同时完成：对变更 artifact 的完整性、正确性、一致性核对，以及 **内嵌的 Code quality** 评审语义，与 §3.1、**§9** 一致。**禁止**增设与 **`verify` 并列的、仅针对 code quality 的归档前验收入口。阶段 3 子代理链与 TDD 的产物在本阶段 **统一验收**。
+当需要完整、结构化的变更核查时，运行 **`openspec-verify-change`** 与 **`/opsx:verify`**。该步骤用于对变更 artifact 的完整性、正确性、一致性核对，以及 **内嵌的 Code quality** 评审语义，与 §3.1、**§9** 一致。**禁止**增设与 **`verify` 并列的、仅针对 code quality 的结构化验证入口。阶段 3 子代理链与 TDD 的产物可在本阶段统一核查。
 
 **阶段 5 — 收尾，OpenSpec `archive`**  
-仅在 **verify 通过** 或 **必须修复项已处理完毕** 后，对变更执行 **archive**，合并或归档 living spec。
+在用户决定收尾时，对变更执行 **archive**，合并或归档 living spec。是否先运行 **`verify`** 由用户或工作流编排决定。
 
 **依赖关系**  
-`explore` → `propose`，含 §3.2 **writing-plans** 粒度 → `apply`，含子代理、TDD、可选调试 → `verify`，含内嵌 Code quality → `archive`。**verify** 须在 **archive** 之前；**apply** 内子代理与 TDD 均 **汇入** `verify`，**禁止**绕过 **`verify`** 直接进入 **`archive`**。
+`explore` → `propose`，含 §3.2 **writing-plans** 粒度 → `apply`，含子代理、TDD、可选调试 → 可选 `verify`，含内嵌 Code quality → `archive`。**apply** 内子代理与 TDD 的产物可汇入 **`verify`** 做整体验证，但 **`archive`** 不以 **`verify`** 为强制前置。
 
 ---
 
@@ -220,10 +220,10 @@
 **verify**
 
 - **`openspec-verify-change`** 与 **`/opsx:verify`** 所代表的 `verify` 流程 **SHALL** 在 OpenSpec 既有维度，如 Completeness、Correctness、Coherence 之外 **内嵌** `code-quality-reviewer-prompt.md` 所表达的代码质量评审语义，含焦点、通过或关注标准、必要时子代理 dispatch。
-- **`verify` SHALL NOT** 与独立「仅 Code quality」技能或命令构成两条并列的归档前验收入口；含代码质量的验证 **SHALL** **仅** 通过 **`openspec-verify-change`** 与 **`/opsx:verify`** 完成。
+- **`verify` SHALL NOT** 与独立「仅 Code quality」技能或命令构成两条并列的结构化验证入口；含代码质量的结构化验证 **SHALL** **仅** 通过 **`openspec-verify-change`** 与 **`/opsx:verify`** 完成。
 - Code quality 结论 **SHALL** 进入 OpenSpec 约定的验证报告或变更目录结构，含章节或结构化字段；**SHALL NOT** 另建仅属 Superpowers 的并行 **`CODE_QUALITY.md` 主路径**，除非项目 schema **显式**约定同名 artifact。
 
 **apply 与 verify**
 
-- **归档前** 最终代码质量门禁 **SHALL** 以 **`verify`** 为准，**verify** 含内嵌 Code quality；**SHALL NOT** 依赖与 `verify` 无关的另一套并行终审流程。
-- 本规范 **不禁止** apply 阶段子代理链按 §4 使用 **Code quality reviewer** 做开发期迭代；与上条的关系见 **§4** 小节 **apply 阶段与 §3.1 verify 的关系**。
+- 本规范 **不禁止** apply 阶段子代理链按 §4 使用 **Code quality reviewer** 做开发期迭代。
+- 若需要整变更、成体系的核查，工作流 **SHALL** 使用 **`verify`** 汇总相关结论；**SHALL NOT** 再引入与其并列的另一条独立结构化验证主入口。

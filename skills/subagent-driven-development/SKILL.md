@@ -9,7 +9,7 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 
 **Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
 
-**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
+**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration without taking git control away from the user
 
 ## When to Use
 
@@ -30,7 +30,7 @@ digraph when_to_use {
 }
 ```
 
-**Session execution:** Same session, fresh subagent per task, two-stage review after each task (spec then code quality). **Final archive gate** is always OpenSpec `verify` (`openspec-verify-change` / `/opsx:verify`), not a separate Final reviewer round.
+**Session execution:** Same session, fresh subagent per task, two-stage review after each task (spec then code quality). OpenSpec `verify` (`openspec-verify-change` / `/opsx:verify`) remains available when you want a whole-change verification report, but it is not required before archive.
 
 ## The Process
 
@@ -43,7 +43,7 @@ digraph process {
         "Dispatch implementer subagent (./implementer-prompt.md)" [shape=box];
         "Implementer subagent asks questions?" [shape=diamond];
         "Answer questions, provide context" [shape=box];
-        "Implementer subagent implements, tests, commits, self-reviews" [shape=box];
+        "Implementer subagent implements, tests, self-reviews" [shape=box];
         "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [shape=box];
         "Spec reviewer subagent confirms code matches spec?" [shape=diamond];
         "Implementer subagent fixes spec gaps" [shape=box];
@@ -55,14 +55,14 @@ digraph process {
 
     "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
     "More tasks remain?" [shape=diamond];
-    "Use finishing-a-development-branch (after verify)" [shape=box style=filled fillcolor=lightgreen];
+    "Report completion and wait for user direction" [shape=box style=filled fillcolor=lightgreen];
 
     "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
     "Implementer subagent asks questions?" -> "Answer questions, provide context" [label="yes"];
     "Answer questions, provide context" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Implementer subagent asks questions?" -> "Implementer subagent implements, tests, commits, self-reviews" [label="no"];
-    "Implementer subagent implements, tests, commits, self-reviews" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)";
+    "Implementer subagent asks questions?" -> "Implementer subagent implements, tests, self-reviews" [label="no"];
+    "Implementer subagent implements, tests, self-reviews" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)";
     "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" -> "Spec reviewer subagent confirms code matches spec?";
     "Spec reviewer subagent confirms code matches spec?" -> "Implementer subagent fixes spec gaps" [label="no"];
     "Implementer subagent fixes spec gaps" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [label="re-review"];
@@ -73,7 +73,7 @@ digraph process {
     "Code quality reviewer subagent approves?" -> "Mark task complete in TodoWrite" [label="yes"];
     "Mark task complete in TodoWrite" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
-    "More tasks remain?" -> "Use finishing-a-development-branch (after verify)" [label="no"];
+    "More tasks remain?" -> "Report completion and wait for user direction" [label="no"];
 }
 ```
 
@@ -139,12 +139,12 @@ Implementer: "Got it. Implementing now..."
   - Implemented install-hook command
   - Added tests, 5/5 passing
   - Self-review: Found I missed --force flag, added it
-  - Committed
+  - Ready for user review
 
 [Dispatch spec compliance reviewer]
 Spec reviewer: ✅ Spec compliant - all requirements met, nothing extra
 
-[Get git SHAs, dispatch code quality reviewer]
+[Dispatch code quality reviewer]
 Code reviewer: Strengths: Good test coverage, clean. Issues: None. Approved.
 
 [Mark Task 1 complete]
@@ -159,7 +159,7 @@ Implementer:
   - Added verify/repair modes
   - 8/8 tests passing
   - Self-review: All good
-  - Committed
+  - Ready for user review
 
 [Dispatch spec compliance reviewer]
 Spec reviewer: ❌ Issues:
@@ -186,7 +186,7 @@ Code reviewer: ✅ Approved
 ...
 
 [After all tasks]
-Run OpenSpec verify on the change (`openspec-verify-change` / `/opsx:verify`) before archive. Development-time code quality reviews above do not replace verify.
+Run OpenSpec verify on the change (`openspec-verify-change` / `/opsx:verify`) if you want a whole-change verification report. Development-time code quality reviews above do not replace that report.
 
 Done!
 ```
@@ -259,9 +259,10 @@ Done!
 **Required workflow skills:**
 - **using-git-worktrees** — isolated workspace before starting when applicable
 - **openspec-propose** — formal plan lives under `openspec/changes/<name>/` (tasks/design/specs per project schema); this skill executes that plan, not a parallel `writing-plans` document
-- **finishing-a-development-branch** — after **verify** passes
 
 **Subagents should use:**
 - **test-driven-development** — TDD per task when tests apply
 
-**Archive gate:** **openspec-verify-change** / `/opsx:verify` is the sole pre-archive verification entry; Code quality semantics are embedded there (see plugin PLAN §3.1).
+**Whole-change verification:** **openspec-verify-change** / `/opsx:verify` is the structured verification flow for a full change review; Code quality semantics are embedded there when you choose to run it.
+
+**Git ownership:** This skill does not commit, push, merge, or otherwise manage git on the user's behalf.

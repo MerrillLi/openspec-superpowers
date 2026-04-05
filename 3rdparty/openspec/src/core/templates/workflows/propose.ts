@@ -25,12 +25,6 @@ When ready to implement, run /opsx:apply
 
 **Steps**
 
-0. **If requirements are not aligned, run a short discover loop (Superpowers style)**
-
-   - Ask one question only and wait for the answer.
-   - Confirm \`goal\`, \`scope\`, \`constraints\`, and \`acceptance criteria\` before creating any artifacts.
-   - Keep iterating until the above are explicit or user explicitly confirms they are complete.
-
 1. **If no clear input provided, ask what they want to build**
 
    Use the **AskUserQuestion tool** (open-ended, no preset options) to ask:
@@ -75,7 +69,6 @@ When ready to implement, run /opsx:apply
       - Read any completed dependency files for context
       - Create the artifact file using \`template\` as the structure
       - Apply \`context\` and \`rules\` as constraints - but do NOT copy them into the file
-      - Keep every generated task list writing-plan ready: granular, executable, and traceable to an acceptance check
       - Show brief progress: "Created <artifact-id>"
 
    b. **Continue until all \`applyRequires\` artifacts are complete**
@@ -143,12 +136,6 @@ When ready to implement, run /opsx:apply
 
 **Steps**
 
-0. **If requirements are not aligned, run a short discover loop (Superpowers style)**
-
-   - Ask one question only and wait for the answer.
-   - Confirm \`goal\`, \`scope\`, \`constraints\`, and \`acceptance criteria\` before creating any artifacts.
-   - Keep iterating until the above are explicit or user explicitly confirms they are complete.
-
 1. **If no input provided, ask what they want to build**
 
    Use the **AskUserQuestion tool** (open-ended, no preset options) to ask:
@@ -193,7 +180,6 @@ When ready to implement, run /opsx:apply
       - Read any completed dependency files for context
       - Create the artifact file using \`template\` as the structure
       - Apply \`context\` and \`rules\` as constraints - but do NOT copy them into the file
-      - Keep every generated task list writing-plan ready: granular, executable, and traceable to an acceptance check
       - Show brief progress: "Created <artifact-id>"
 
    b. **Continue until all \`applyRequires\` artifacts are complete**

@@ -1,5 +1,5 @@
 {
-  "name": "@merrillli/openspec-superpowers",
+  "name": "@fission-ai/openspec",
   "version": "1.2.0",
   "description": "AI-native system for spec-driven development",
   "keywords": [
@@ -9,10 +9,10 @@
     "ai",
     "development"
   ],
-  "homepage": "https://github.com/MerrillLi/openspec-superpowers/tree/main/3rdparty/openspec",
+  "homepage": "https://github.com/Fission-AI/OpenSpec",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MerrillLi/openspec-superpowers.git"
+    "url": "https://github.com/Fission-AI/OpenSpec"
   },
   "license": "MIT",
   "author": "OpenSpec Contributors",
@@ -33,7 +33,6 @@
     "dist",
     "bin",
     "schemas",
-    "skills",
     "scripts/postinstall.js",
     "!dist/**/*.test.js",
     "!dist/**/__tests__",
@@ -43,16 +42,18 @@
     "lint": "eslint src/",
     "build": "node build.js",
     "dev": "tsc --watch",
-    "dev:cli": "npm run build && node bin/openspec.js",
+    "dev:cli": "pnpm build && node bin/openspec.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:postinstall": "node scripts/postinstall.js",
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run build",
     "postinstall": "node scripts/postinstall.js",
     "check:pack-version": "node scripts/pack-version-check.mjs",
-    "release": "npm run release:ci",
-    "release:ci": "npm run check:pack-version && npm exec changeset publish",
+    "release": "pnpm run release:ci",
+    "release:ci": "pnpm run check:pack-version && pnpm exec changeset publish",
     "changeset": "changeset"
   },
   "engines": {

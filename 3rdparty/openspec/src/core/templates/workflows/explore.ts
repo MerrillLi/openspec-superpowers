@@ -14,15 +14,7 @@ export function getExploreSkillTemplate(): SkillTemplate {
 
 **IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing.
 
-**This is a stance, not a script.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
-
-Before proposing, run a Superpowers-style clarification pass:
-
-1. Ask one high-impact question.
-2. Wait for the user's answer.
-3. Confirm the answer and ask the next question only if needed.
-4. Continue until at least these are clear: goal, scope, constraints, and acceptance criteria.
-5. Only then suggest moving to \`/opsx:propose\`.
+**This is a stance, not a workflow.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
 
 ---
 
@@ -311,15 +303,7 @@ export function getOpsxExploreCommandTemplate(): CommandTemplate {
 
 **IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing.
 
-**This is a stance, not a script.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
-
-Before proposing, run a Superpowers-style clarification pass:
-
-1. Ask one high-impact question.
-2. Wait for the user's answer.
-3. Confirm the answer and ask the next question only if needed.
-4. Continue until at least these are clear: goal, scope, constraints, and acceptance criteria.
-5. Only then suggest moving to \`/opsx:propose\`.
+**This is a stance, not a workflow.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
 
 **Input**: The argument after \`/opsx:explore\` is whatever the user wants to think about. Could be:
 - A vague idea: "real-time collaboration"

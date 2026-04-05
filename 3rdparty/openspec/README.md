@@ -128,16 +128,6 @@ AI coding assistants are powerful but unpredictable when requirements live only 
 - **Work fluidly** — update any artifact anytime, no rigid phase gates
 - **Use your tools** — works with 20+ AI assistants via slash commands
 
-## About this custom distribution
-
-This distribution bundles a Superpowers-informed workflow layer and custom skill pack loading so `openspec init` can directly bootstrap more structured planning, implementation, verification, and debugging behavior.
-
-### Why it exists
-
-- Make OpenSpec the single place for `/opsx:*` behavior instead of relying on separate plugins.
-- Make custom `SKILL.md` packs part of the default bootstrap flow.
-- Keep a reproducible source of truth for team collaboration while still allowing per-project overrides.
-
 ### How we compare
 
 **vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Thorough but heavyweight. Rigid phase gates, lots of Markdown, Python setup. OpenSpec is lighter and lets you iterate freely.
@@ -152,18 +142,6 @@ This distribution bundles a Superpowers-informed workflow layer and custom skill
 
 ```bash
 npm install -g @fission-ai/openspec@latest
-```
-
-If you are using this forked package, install from your namespace instead:
-
-```bash
-npm install -g @merrillli/openspec-superpowers@latest
-```
-
-Or install directly from git (for local package maintenance workflows):
-
-```bash
-npm install -g git+https://github.com/MerrillLi/openspec-superpowers.git#main:3rdparty/openspec
 ```
 
 **Refresh agent instructions**
@@ -189,14 +167,6 @@ openspec update
 When writing proposals, keep the OpenSpec philosophy in mind: we serve a wide variety of users across different coding agents, models, and use cases. Changes should work well for everyone.
 
 **AI-generated code is welcome** — as long as it's been tested and verified. PRs containing AI-generated code should mention the coding agent and model used (e.g., "Generated with Claude Code using claude-opus-4-5-20251101").
-
-### Custom distribution docs
-
-- **[Custom Skill Packs](docs/custom-skill-packs.md)**: how we discover and sync skill packs into target AI tools
-- **[Installation (GitHub / npm package)](docs/installation.md)**: fork installation options and project bootstrap steps
-- **[Fork and Release](docs/fork-and-release.md)**: publish process and release notes checklist
-
-Also check `CONTRIBUTING.md` before submitting changes.
 
 ### Development
 

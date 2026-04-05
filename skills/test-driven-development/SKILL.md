@@ -11,38 +11,38 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
+Use this skill when TDD will buy meaningful confidence, not as a ritual for every tiny edit.
 
 ## When to Use
 
-**Always:**
+**Use by default for:**
 - New features
 - Bug fixes
-- Refactoring
 - Behavior changes
 
-**Exceptions (ask your human partner):**
+**Use especially for:**
+- Core or user-visible flows
+- Risky logic changes
+- Regression fixes
+- Code that is hard to validate confidently by inspection alone
+
+**May be unnecessary or lighter-weight for:**
 - Throwaway prototypes
 - Generated code
 - Configuration files
 
-Thinking "skip TDD just this once"? Stop. That's rationalization.
+**May not need full TDD ceremony for:**
+- Small mechanical edits with low behavioral risk
+
+If the change is important enough that failure would matter, prefer TDD.
 
 ## The Iron Law
 
 ```
-NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+WHEN USING TDD, NO BEHAVIORAL IMPLEMENTATION BEFORE A FAILING TEST FIRST
 ```
 
-Write code before the test? Delete it. Start over.
-
-**No exceptions:**
-- Don't keep it as "reference"
-- Don't "adapt" it while writing tests
-- Don't look at it
-- Delete means delete
-
-Implement fresh from tests. Period.
+If you've already written the implementation for a task that should have been test-driven, stop and decide whether to back up and add a proper failing test before continuing. Do not just wave it through without evidence.
 
 ## Red-Green-Refactor
 
@@ -207,13 +207,13 @@ Next failing test for next feature.
 
 **"I'll write tests after to verify it works"**
 
-Tests written after code pass immediately. Passing immediately proves nothing:
+Tests written after code often pass immediately. Passing immediately proves much less than a clean red-green cycle:
 - Might test wrong thing
 - Might test implementation, not behavior
 - Might miss edge cases you forgot
 - You never saw it catch the bug
 
-Test-first forces you to see the test fail, proving it actually tests something.
+Test-first forces you to see the test fail, proving it actually tests something. That matters most on behavior-critical work.
 
 **"I already manually tested all the edge cases"**
 
@@ -225,13 +225,11 @@ Manual testing is ad-hoc. You think you tested everything but:
 
 Automated tests are systematic. They run the same way every time.
 
-**"Deleting X hours of work is wasteful"**
+**"Adding tests after is good enough"**
 
-Sunk cost fallacy. The time is already gone. Your choice now:
-- Delete and rewrite with TDD (X more hours, high confidence)
-- Keep it and add tests after (30 min, low confidence, likely bugs)
+Sometimes it is acceptable to add tests after implementation, but only when the task is low-risk enough that full TDD would be disproportionate. For important behavior changes, tests-after still loses the strongest proof that the test actually catches the bug or requirement.
 
-The "waste" is keeping code you can't trust. Working code without real tests is technical debt.
+The goal is not ritual purity. The goal is confidence proportional to risk.
 
 **"TDD is dogmatic, being pragmatic means adapting"**
 
@@ -241,7 +239,7 @@ TDD IS pragmatic:
 - Documents behavior (tests show how to use code)
 - Enables refactoring (change freely, tests catch breaks)
 
-"Pragmatic" shortcuts = debugging in production = slower.
+Pragmatism means choosing TDD where it buys real confidence, not skipping it on the changes that need it most.
 
 **"Tests after achieve the same goals - it's spirit not ritual"**
 
@@ -251,41 +249,30 @@ Tests-after are biased by your implementation. You test what you built, not what
 
 Tests-first force edge case discovery before implementing. Tests-after verify you remembered everything (you didn't).
 
-30 minutes of tests after ≠ TDD. You get coverage, lose proof tests work.
+Tests-after can still add value, but they are not a full substitute for TDD on high-risk behavioral work.
 
 ## Common Rationalizations
 
 | Excuse | Reality |
 |--------|---------|
-| "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
-| "I'll test after" | Tests passing immediately prove nothing. |
-| "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
-| "Already manually tested" | Ad-hoc ≠ systematic. No record, can't re-run. |
-| "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
-| "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
-| "Need to explore first" | Fine. Throw away exploration, start with TDD. |
-| "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
-| "TDD will slow me down" | TDD faster than debugging. Pragmatic = test-first. |
-| "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
-| "Existing code has no tests" | You're improving it. Add tests for existing code. |
+| "Too simple to test" | Maybe. Decide based on risk, not habit. |
+| "I'll test after" | Sometimes acceptable for low-risk work, weak evidence for critical behavior. |
+| "Tests after achieve same goals" | Not for high-risk behavior changes. |
+| "Already manually tested" | Manual testing is weak regression protection. |
+| "Need to explore first" | Fine. But once behavior matters, add real tests. |
+| "Test hard = design unclear" | Often true; use that signal. |
+| "TDD will slow me down" | Often false on risky work. |
+| "Existing code has no tests" | Improve confidence where you're changing behavior. |
 
-## Red Flags - STOP and Start Over
+## Red Flags
 
-- Code before test
-- Test after implementation
-- Test passes immediately
-- Can't explain why test failed
-- Tests added "later"
-- Rationalizing "just this once"
-- "I already manually tested it"
-- "Tests after achieve the same purpose"
-- "It's about spirit not ritual"
-- "Keep as reference" or "adapt existing code"
-- "Already spent X hours, deleting is wasteful"
-- "TDD is dogmatic, I'm being pragmatic"
-- "This is different because..."
+- Skipping tests on a behavior-critical change
+- Test added after implementation with no good reason on risky work
+- Test passes immediately and you cannot show it would have caught the issue
+- Can't explain why the chosen testing strategy is sufficient for the task's risk
+- Relying only on manual testing for a regression-prone path
 
-**All of these mean: Delete code. Start over with TDD.**
+These are signs to slow down and reconsider whether the task should be handled with proper TDD.
 
 ## Example: Bug Fix
 
@@ -337,7 +324,7 @@ Before marking work complete:
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered
 
-Can't check all boxes? You skipped TDD. Start over.
+Can't check all boxes on a task that needed TDD? Reassess before claiming strong confidence.
 
 ## When Stuck
 
@@ -350,9 +337,7 @@ Can't check all boxes? You skipped TDD. Start over.
 
 ## Debugging Integration
 
-Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
-
-Never fix bugs without a test.
+Bug found? Prefer a failing test that reproduces it. Follow the TDD cycle when the bug matters enough to deserve regression protection.
 
 ## Testing Anti-Patterns
 
@@ -368,4 +353,4 @@ Production code → test exists and failed first
 Otherwise → not TDD
 ```
 
-No exceptions without your human partner's permission.
+Use TDD where confidence matters. When you choose not to use it, that should be a conscious scope and risk decision, not inertia.

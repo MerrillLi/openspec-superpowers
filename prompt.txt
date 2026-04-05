@@ -1,0 +1,27 @@
+你在一个叫 `openspec-superpowers` 的 OpenCode 插件仓库里工作。先不要改文件，先分析并给出方案。
+目标：
+- 我需要保留一个“轻量的 superpowers 风格 hook”。
+- 这个 hook 的作用是让模型平时默认能想到并使用 subagent / parallel agent / skill tool / TDD / debugging 等通用工程能力。
+- 但这个 hook 不能干扰我当前的 OpenSpec 工作流。
+核心约束：
+- OpenSpec 的流程必须保持独立，由 `openspec-*` skills 负责。
+- hook 里不要注入 `/opsx:explore`、`/opsx:propose`、`/opsx:verify` 的具体流程规则。
+- hook 里不要覆盖或抢占项目已有指令。
+- 只需要“能力唤醒”，不要“工作流接管”。
+- 不要做成每条消息都注入；参考 superpowers，只在会话启动时注入一次或用等效机制。
+- 保留技能发现能力：OpenCode 仍然要能通过 `config.skills.paths` 找到本仓库的 `skills/`。
+- 如果需要比较，请参考 `3rdparty/superpowers/.opencode/plugins/superpowers.js` 和 `3rdparty/superpowers/hooks/session-start`，理解它们是如何做一次性注入和技能注册的。
+你需要检查的点：
+- 当前仓库的 OpenCode 插件入口如何工作。
+- 现有 hook 是否太重，是否把 OpenSpec 和 superpowers 语义混在一起。
+- 是否应该拆成：
+  1. skills 路径注册 hook
+  2. 轻量 bootstrap hook
+- bootstrap 文案应该如何写，才能提醒默认用 subagent / parallel / skill，但不影响 OpenSpec。
+你最后要输出：
+- 你对当前 hook 结构的判断
+- 和 upstream superpowers hook 的差异
+- 推荐的最小改法
+- 一段可直接落地的 bootstrap 文案草稿
+- 如果你认为不该改，也要说明原因和替代方案
+如果你愿意，我也可以把它再压缩成一个更像“任务单”的版本。

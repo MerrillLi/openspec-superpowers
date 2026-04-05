@@ -41,10 +41,6 @@ import {
   generateSkillContent,
   type ToolSkillStatus,
 } from './shared/index.js';
-import {
-  getProjectCustomSkillPacks,
-  syncProjectCustomSkillPacks,
-} from './shared/custom-skill-packs.js';
 import { getGlobalConfig, type Delivery, type Profile } from './global-config.js';
 import { getProfileWorkflows, CORE_WORKFLOWS, ALL_WORKFLOWS } from './profiles.js';
 import { getAvailableTools } from './available-tools.js';
@@ -503,7 +499,6 @@ export class InitCommand {
     refreshedTools: typeof tools;
     failedTools: Array<{ name: string; error: Error }>;
     commandsSkipped: string[];
-    customSkillPacks: string[];
     removedCommandCount: number;
     removedSkillCount: number;
   }> {
@@ -513,7 +508,6 @@ export class InitCommand {
     const commandsSkipped: string[] = [];
     let removedCommandCount = 0;
     let removedSkillCount = 0;
-    const customSkillPacks = await getProjectCustomSkillPacks(projectPath);
 
     // Read global config for profile and delivery settings (use --profile override if set)
     const globalConfig = getGlobalConfig();
@@ -549,10 +543,6 @@ export class InitCommand {
 
             // Write the skill file
             await FileSystemUtils.writeFile(skillFile, skillContent);
-          }
-
-          if (customSkillPacks.length > 0) {
-            await syncProjectCustomSkillPacks(skillsDir, customSkillPacks);
           }
         }
         if (!shouldGenerateSkills) {
@@ -596,7 +586,6 @@ export class InitCommand {
       refreshedTools,
       failedTools,
       commandsSkipped,
-      customSkillPacks: customSkillPacks.map((skillPack) => skillPack.name),
       removedCommandCount,
       removedSkillCount,
     };
@@ -642,7 +631,6 @@ export class InitCommand {
       refreshedTools: typeof tools;
       failedTools: Array<{ name: string; error: Error }>;
       commandsSkipped: string[];
-      customSkillPacks: string[];
       removedCommandCount: number;
       removedSkillCount: number;
     },
@@ -668,9 +656,7 @@ export class InitCommand {
       const delivery: Delivery = globalConfig.delivery ?? 'both';
       const workflows = getProfileWorkflows(profile, globalConfig.workflows);
       const toolDirs = [...new Set(successfulTools.map((t) => t.skillsDir))].join(', ');
-      const skillCount = delivery !== 'commands'
-        ? getSkillTemplates(workflows).length + results.customSkillPacks.length
-        : 0;
+      const skillCount = delivery !== 'commands' ? getSkillTemplates(workflows).length : 0;
       const commandCount = delivery !== 'skills' ? getCommandContents(workflows).length : 0;
       if (skillCount > 0 && commandCount > 0) {
         console.log(`${skillCount} skills and ${commandCount} commands in ${toolDirs}/`);
